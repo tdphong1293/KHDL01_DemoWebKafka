@@ -32,7 +32,6 @@ const UserSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: true,
         minLength: [6, "Độ dài tên phải nằm trong khoảng 6 - 50 ký tự"],
         maxLength: [50, "Độ dài tên phải nằm trong khoảng 6 - 50 ký tự"]
     },
@@ -42,7 +41,6 @@ const UserSchema = new mongoose.Schema({
             values: ['Nam', 'Nữ'],
             message: "Giá trị {VALUE} không hợp lệ"
         },
-        required: true
     },
     dateOfBirth: {
         type: Date,
