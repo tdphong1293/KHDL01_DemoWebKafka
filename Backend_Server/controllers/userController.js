@@ -16,7 +16,7 @@ userController.signup = async (req, res) => {
 
     try {
         const existingUser = await User.findOne({
-            $or: [{ email: email }, { username }],
+            $or: [{ email: email }, { username: username }],
         });
 
         if (existingUser) {
@@ -39,10 +39,10 @@ userController.signup = async (req, res) => {
 };
 
 userController.login = async (req, res) => {
-    const { username, password } = req.body;
+    const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ username: username });
+        const user = await User.findOne({ email: email });
 
         if (!user) {
             return res.status(401).json({ error: "Sai tên đăng nhập hoặc mật khẩu" });
