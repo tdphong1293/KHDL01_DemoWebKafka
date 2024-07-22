@@ -45,13 +45,13 @@ userController.login = async (req, res) => {
         const user = await User.findOne({ email: email });
 
         if (!user) {
-            return res.status(401).json({ error: "Sai tên đăng nhập hoặc mật khẩu" });
+            return res.status(401).json({ error: "Sai email hoặc mật khẩu" });
         }
 
         const checkPassword = await bcrypt.compare(password, user.password);
 
         if (!checkPassword) {
-            return res.status(401).json({ error: "Sai tên đăng nhập hoặc mật khẩu" });
+            return res.status(401).json({ error: "Sai email hoặc mật khẩu" });
         }
 
         const payload = getPayload(user);
