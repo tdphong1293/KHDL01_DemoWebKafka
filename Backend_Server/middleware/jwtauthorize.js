@@ -3,7 +3,7 @@ require("dotenv").config;
 
 const strictVerifyToken = (req, res, next) => {
     try {
-        const token = req.headers["x-access-token"];
+        const token = req.body.token;
 
         if (!token) {
             throw new Error("No token provided");
@@ -21,7 +21,7 @@ const strictVerifyToken = (req, res, next) => {
 
 const optionalVerifyToken = (req, res, next) => {
     try {
-        const token = req.headers["x-access-token"];
+        const token = req.body.token;
 
         if (!token) return next();
 
