@@ -44,7 +44,6 @@ const UserSchema = new mongoose.Schema({
     },
     dateOfBirth: {
         type: Date,
-        required: true,
         validate: {
             validator: (date) => {
                 return validator.isISO8601(date);
