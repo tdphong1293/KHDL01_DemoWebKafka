@@ -31,9 +31,13 @@ const Login: FC = () => {
           </Button>
 
           <div className={styles.forgotPassword}>
-            <a href="#">Forgot password?</a>
+          <Link href="/">
+            <p>
+              Return to home page
+            </p>
+          </Link>
           </div>
-
+          
           <hr className={styles.separator} />
 
           <Link href="/auth/register">

@@ -4,10 +4,11 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Link from "next/link";
+import  '../styles/page.module.css';
 
 function Header() {
     return (
-        <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar expand="lg" className="fixed-top bg-light shadow-sm">
             <Container>
                 <Navbar.Brand>
                     <Link href={"/"} className="navbar-brand">Home</Link>
