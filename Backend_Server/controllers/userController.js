@@ -46,11 +46,12 @@ userController.login = async (req, res) => {
             username: user.username
         };
 
-        const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' });
+        const token = jwt.sign(payload, process.env.SECRET_KEY);
 
-        return res.sendStatus(201).json({ message: "Đăng nhập thành công", token, user: payload });
+        return res.status(200).json({ message: "Đăng nhập thành công", token, user: payload });
 
     } catch (error) {
+        console.log(error);
         return res.sendStatus(500);
     }
 };

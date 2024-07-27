@@ -5,12 +5,17 @@ import { FaThumbsUp, FaComment } from 'react-icons/fa'; // Import FontAwesome ic
 import { format, parseISO } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import styles from '../../styles/page.module.css';
+import useSWR from 'swr';
+import axios from 'axios';
 
 const Home = () => {
     const [postContent, setPostContent] = useState('');
     const [posts, setPosts] = useState<{ content: string, likes: number, comments: { text: string, date: Date }[], date: Date }[]>([]);
     const [commentInput, setCommentInput] = useState<string>('');
     const [currentPostIndex, setCurrentPostIndex] = useState<number | null>(null);
+
+    const userString = localStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
 
     const handlePostChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setPostContent(event.target.value);
@@ -47,12 +52,12 @@ const Home = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Chào bạn đến với TrippleDuck</h1>
+            <h1 className={styles.title}>{user ? `Chào ${user.username} đến với TripleDuck` : "Chào bạn đến với TrippleDuck"}</h1>
             <p className={styles.subtitle}>Bạn đang nghĩ gì thế? Có thể chia sẻ với mọi người được không 🥰😘</p>
             <div className={styles.postBox}>
                 <form onSubmit={handlePostSubmit}>
                     <h2 className={styles.createPostTitle}>Tạo bài viết</h2>
-                    <textarea 
+                    <textarea
                         className={styles.textarea}
                         placeholder="Bạn đang nghĩ gì?"
                         value={postContent}
@@ -66,7 +71,7 @@ const Home = () => {
                     <div key={index} className={styles.post}>
                         <div className={styles.postHeader}>
                             <div className={styles.postAuthor}>
-                                <span className={styles.postAuthorName}>Game Play</span>
+                                <span className={styles.postAuthorName}>{user.username}</span>
                                 <span className={styles.postTime}>{formatDate(post.date)}</span>
                             </div>
                         </div>
@@ -83,14 +88,14 @@ const Home = () => {
                         </div>
                         {currentPostIndex === index && (
                             <div className={styles.commentSection}>
-                                <input 
+                                <input
                                     type="text"
                                     className={styles.commentInput}
-                                    placeholder="Add a comment..."
+                                    placeholder="Thêm bình luận..."
                                     value={commentInput}
                                     onChange={handleCommentInputChange}
                                 />
-                                <button 
+                                <button
                                     className={styles.commentButton}
                                     onClick={() => handleCommentSubmit(index)}
                                 >
@@ -99,6 +104,7 @@ const Home = () => {
                                 <div className={styles.commentsList}>
                                     {post.comments.map((comment, idx) => (
                                         <div key={idx} className={styles.comment}>
+                                            <span className={styles.postAuthorName}>{user.username}</span>
                                             <span className={styles.commentText}>{comment.text}</span>
                                             <span className={styles.commentDate}>{formatDate(comment.date)}</span>
                                         </div>

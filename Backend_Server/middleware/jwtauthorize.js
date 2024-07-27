@@ -25,8 +25,9 @@ const optionalVerifyToken = (req, res, next) => {
 
         if (!token) return next();
 
-        const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        req.body.userID = decoded.userID;
+        const { userID, username } = jwt.verify(token, process.env.SECRET_KEY);
+
+        req.body = { ...req.body, userID, username };
 
         next();
     } catch (err) {
