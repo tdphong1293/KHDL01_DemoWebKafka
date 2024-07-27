@@ -236,7 +236,7 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  background-color: #fcfde9;
 }
 
 .topPanel {
@@ -250,7 +250,7 @@
 }
 
 .brand {
-  color: #007bff;
+  color: #352104;
 }
 
 .bottomPanel {
@@ -275,10 +275,22 @@
   font-size: 16px;
 }
 
+
 .loginButton {
   width: 100%;
   padding: 10px;
   font-size: 16px;
+  color: #352104; 
+  font-weight: bold;
+  background-color: #fbd800;
+  border-color: #fbd800;
+}
+
+.loginButton:hover {
+  color: #fbd800;
+  font-weight: bold;
+  background-color: #352104;
+  border-color: #352104;
 }
 
 .forgotPassword {
@@ -294,6 +306,17 @@
   width: 100%;
   padding: 10px;
   font-size: 16px;
+  color: #fbd800;
+  font-weight: bold;
+  background-color: #352104;
+  border-color: #352104;
+}
+
+.createAccountButton:hover {
+  color: #352104;
+  font-weight: bold;
+  background-color: #fbd800;
+  border-color: #fbd800;
 }
 
 /* Home page */
@@ -352,10 +375,19 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  color: #352104; 
+  font-weight: bold;
+  background-color: #fbd800;
+  border-color: #fbd800;
+  width: 100%;
+
 }
 
 .publishButton:hover {
-  background-color: #0056b3;
+  color: #fbd800; 
+  font-weight: bold;
+  background-color: #352104;
+  border-color: #352104;
 }
 
 .postsContainer {

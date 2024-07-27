@@ -47,18 +47,18 @@ const Home = () => {
 
     return (
         <div className={styles.container}>
-            <h1 className={styles.title}>Hello, Game Play</h1>
-            <p className={styles.subtitle}>What's New with you? Would you like to share something with community</p>
+            <h1 className={styles.title}>Chào bạn đến với TrippleDuck</h1>
+            <p className={styles.subtitle}>Bạn đang nghĩ gì thế? Có thể chia sẻ với mọi người được không 🥰😘</p>
             <div className={styles.postBox}>
                 <form onSubmit={handlePostSubmit}>
-                    <h2 className={styles.createPostTitle}>Create Post</h2>
+                    <h2 className={styles.createPostTitle}>Tạo bài viết</h2>
                     <textarea 
                         className={styles.textarea}
-                        placeholder="What's New"
+                        placeholder="Bạn đang nghĩ gì?"
                         value={postContent}
                         onChange={handlePostChange}
                     />
-                    <button type="submit" className={styles.publishButton}>Publish</button>
+                    <button type="submit" className={styles.publishButton}>Đăng</button>
                 </form>
             </div>
             <div className={styles.postsContainer}>
