@@ -17,13 +17,14 @@ export default function HomeLayout({
 }>) {
     console.log("HomeLayout rendered");
     return (
-        <Container className={`${inter.className} pt-5`}>
+        <>
             <Header />
-            <Container className="mt-2"> 
-            {children}
+            <Container className={`${inter.className} pt-5`}>
+                <Container className="mt-2">
+                    {children}
+                </Container>
             </Container>
-            <ToastContainer />
             <Footer />
-        </Container>
+        </>
     );
 }
