@@ -15,7 +15,7 @@ const Home = () => {
     const [currentPostIndex, setCurrentPostIndex] = useState<number | null>(null);
 
     const userString = localStorage.getItem('user');
-    const user = userString ? JSON.parse(userString) : null;
+    const user = userString && userString !== "undefined" ? JSON.parse(userString) : null;
 
     const handlePostChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setPostContent(event.target.value);
