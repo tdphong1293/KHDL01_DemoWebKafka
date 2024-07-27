@@ -24,7 +24,7 @@ const Login: FC = () => {
                 password
             })
 
-            if (response.status === 201) {
+            if (response.status === 200) {
                 const { token, user } = response.data
                 localStorage.setItem('token', token);
                 localStorage.setItem('user', JSON.stringify(user));
