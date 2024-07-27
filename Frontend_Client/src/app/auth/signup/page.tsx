@@ -63,39 +63,52 @@ const Register: FC = () => {
 
     return (
         <div className={styles.loginContainer}>
-            <div className={styles.topPanel}>
-                <p className={`${styles.description} ${styles.brand}`}>Tạo tài khoản của bạn</p>
-            </div>
-            <div className={styles.bottomPanel}>
-                <Form onSubmit={handleSubmit} className={styles.loginForm}>
-                    <Form.Group controlId="formBasicUsername" className={styles.formGroup}>
-                        <Form.Control name="username" type="text" placeholder="Tên đăng nhập" required className={styles.input} />
-                    </Form.Group>
-
-                    <Form.Group controlId="formBasicEmail" className={styles.formGroup}>
-                        <Form.Control name="email" type="email" placeholder="Địa chỉ email" required className={styles.input} />
-                    </Form.Group>
-
-                    <Form.Group controlId="formBasicPassword" className={styles.formGroup}>
-                        <Form.Control name="password" type="password" placeholder="Mật khẩu" required className={styles.input} />
-                    </Form.Group>
-
-                    <Form.Group controlId="formConfirmPassword" className={styles.formGroup}>
-                        <Form.Control name="confirmPassword" type="password" placeholder="Nhập lại mật khẩu" required className={styles.input} />
-                    </Form.Group>
-
-                    <Button variant="primary" type="submit" className={styles.loginButton} disabled={isLoading}>
-                        {isLoading ? 'Đăng thực hiện đăng ký ...' : 'Đăng ký tài khoản'}
-                    </Button>
-
-                    <div className={styles.forgotPassword}>
-                        <p>Đã có tài khoản? 
-                            <Link href="/auth/login">
-                                Đăng nhập
-                            </Link>
-                        </p>
+            <div className='container'>
+                <div className='row'>
+                    <div className='col-sm d-flex justify-content-center align-items-center'>
+                        <Link href={'/home'}>
+                            <img src='/assets/logo_login.png' alt='logo_login'></img>
+                        </Link>
                     </div>
-                </Form>
+                    <div className='col-sm d-flex justify-content-center align-items-center'>
+                        <div className='row d-flex justify-content-center align-items-center'>
+                            <div className={styles.topPanel}>
+                                <p className={`${styles.description} ${styles.brand}`}>Tạo tài khoản của bạn</p>
+                            </div>
+                            <div className={styles.bottomPanel}>
+                                <Form onSubmit={handleSubmit} className={styles.loginForm}>
+                                    <Form.Group controlId="formBasicUsername" className={styles.formGroup}>
+                                        <Form.Control name="username" type="text" placeholder="Tên đăng nhập" required className={styles.input} />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formBasicEmail" className={styles.formGroup}>
+                                        <Form.Control name="email" type="email" placeholder="Địa chỉ email" required className={styles.input} />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formBasicPassword" className={styles.formGroup}>
+                                        <Form.Control name="password" type="password" placeholder="Mật khẩu" required className={styles.input} />
+                                    </Form.Group>
+
+                                    <Form.Group controlId="formConfirmPassword" className={styles.formGroup}>
+                                        <Form.Control name="confirmPassword" type="password" placeholder="Nhập lại mật khẩu" required className={styles.input} />
+                                    </Form.Group>
+
+                                    <Button variant="primary" type="submit" className={styles.loginButton} disabled={isLoading}>
+                                        {isLoading ? 'Đăng thực hiện đăng ký ...' : 'Đăng ký tài khoản'}
+                                    </Button>
+
+                                    <div className={styles.forgotPassword}>
+                                        <p>Đã có tài khoản? 
+                                            <Link href="/auth/login">
+                                                Đăng nhập
+                                            </Link>
+                                        </p>
+                                    </div>
+                                </Form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

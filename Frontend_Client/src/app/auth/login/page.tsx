@@ -49,39 +49,46 @@ const Login: FC = () => {
         }
     };
     return (
-      <div className={styles.loginContainer}>
-            <div className={styles.topPanel}>
-                <p className={`${styles.description} ${styles.brand}`}>Đăng nhập tài khoản</p>
-            </div>
-            <div className={styles.bottomPanel}>
-                <Form onSubmit={handleSubmit} className={styles.loginForm}>
-                    <Form.Group controlId="formBasicEmail" className={styles.formGroup}>
-                        <Form.Control name="email" type="email" placeholder="Địa chỉ email" required className={styles.input} />
-                    </Form.Group>
+        <div className={styles.loginContainer}>
 
-                    <Form.Group controlId="formBasicPassword" className={styles.formGroup}>
-                        <Form.Control name="password" type="password" placeholder="Mật khẩu" required className={styles.input} />
-                    </Form.Group>
-
-                    <Button variant="primary" type="submit" className={styles.loginButton}>
-                        Đăng nhập
-                    </Button>
-                    <div className={styles.forgotPassword}>
-                    <Link href="/home">
-                      <p>
-                        Trở về trang chủ
-                      </p>
-                    </Link>
+            <div className='container'>
+                <div className='row'>
+                    <div className='col-sm d-flex justify-content-center align-items-center'>
+                        <Link href={'/home'}>
+                            <img src='/assets/logo_login.png' alt='logo_login'></img>
+                        </Link>
                     </div>
-                    
-                    <hr className={styles.separator} />
+                    <div className='col-sm d-flex justify-content-center align-items-center'>
+                        <div className='row d-flex justify-content-center align-items-center'>
+                            <div className={styles.topPanel}>
+                                <p className={`${styles.description} ${styles.brand}`}>Đăng nhập tài khoản</p>
+                            </div>
+                            <div className={styles.bottomPanel} >
+                                <Form onSubmit={handleSubmit} className={styles.loginForm}>
+                                    <Form.Group controlId="formBasicEmail" className={styles.formGroup}>
+                                        <Form.Control name="email" type="email" placeholder="Địa chỉ email" required className={styles.input} />
+                                    </Form.Group>
 
-                    <Link href="/auth/signup">
-                        <Button variant="success" className={styles.createAccountButton}>
-                            Đăng ký tài khoản
-                        </Button>
-                    </Link>
-                </Form>
+                                    <Form.Group controlId="formBasicPassword" className={styles.formGroup}>
+                                        <Form.Control name="password" type="password" placeholder="Mật khẩu" required className={styles.input} />
+                                    </Form.Group>
+
+                                    <Button variant="primary" type="submit" className={styles.loginButton}>
+                                        Đăng nhập
+                                    </Button>
+
+                                    <hr className={styles.separator} />
+
+                                    <Link href="/auth/signup">
+                                        <Button variant="success" className={styles.createAccountButton}>
+                                            Đăng ký tài khoản
+                                        </Button>
+                                    </Link>
+                                </Form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

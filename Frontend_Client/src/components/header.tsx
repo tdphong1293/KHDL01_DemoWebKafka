@@ -8,10 +8,12 @@ import  '../styles/page.module.css';
 
 function Header() {
     return (
-        <Navbar expand="lg" className="fixed-top bg-light shadow-sm">
+        <Navbar expand="lg" className="fixed-top shadow-sm" style={{backgroundColor: '#fcfde9'}}>
             <Container>
                 <Navbar.Brand>
-                    <Link href={"/"} className="navbar-brand">Home</Link>
+                    <Link href={"/home"} className="navbar-brand">
+                        <img src="/assets/logo.png" alt="logo"  width="160px" height="53px"/>
+                    </Link>
                 </Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
