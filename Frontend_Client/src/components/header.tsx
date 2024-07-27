@@ -23,7 +23,7 @@ function Header() {
                             <Link href={"/auth/login"} className="nav-link">Login</Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Link href={"/auth/register"} className="nav-link">Register</Link>
+                            <Link href={"/auth/signup"} className="nav-link">Register</Link>
                         </Nav.Item>
                     </Nav>
                 </Navbar.Collapse>

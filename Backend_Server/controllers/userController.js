@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const userController = {};
 
 userController.signup = async (req, res) => {
-    const { username, email, password, dateOfBirth } = req.body;
+    const { username, email, password } = req.body;
 
     try {
         const existingUser = await User.findOne({
@@ -22,11 +22,11 @@ userController.signup = async (req, res) => {
             username,
             email,
             password: hashedPassword,
-            dateOfBirth
         });
 
         return res.sendStatus(201);
     } catch (error) {
+        console.log(error);
         return res.sendStatus(500);
     }
 };

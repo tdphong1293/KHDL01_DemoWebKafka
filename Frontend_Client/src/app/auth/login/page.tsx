@@ -51,7 +51,7 @@ const Login: FC = () => {
     return (
       <div className={styles.loginContainer}>
             <div className={styles.topPanel}>
-                <p className={`${styles.description} ${styles.brand}`}>Welcome to My App</p>
+                <p className={`${styles.description} ${styles.brand}`}>Đăng nhập tài khoản</p>
             </div>
             <div className={styles.bottomPanel}>
                 <Form onSubmit={handleSubmit} className={styles.loginForm}>
@@ -67,9 +67,9 @@ const Login: FC = () => {
                         Đăng nhập
                     </Button>
                     <div className={styles.forgotPassword}>
-                    <Link href="/">
+                    <Link href="/home">
                       <p>
-                        Return to home page
+                        Trở về trang chủ
                       </p>
                     </Link>
                     </div>

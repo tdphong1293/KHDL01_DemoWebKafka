@@ -64,7 +64,7 @@ const Register: FC = () => {
     return (
         <div className={styles.loginContainer}>
             <div className={styles.topPanel}>
-                <p className={`${styles.description} ${styles.brand}`}>Create Your Account</p>
+                <p className={`${styles.description} ${styles.brand}`}>Tạo tài khoản của bạn</p>
             </div>
             <div className={styles.bottomPanel}>
                 <Form onSubmit={handleSubmit} className={styles.loginForm}>
@@ -89,9 +89,11 @@ const Register: FC = () => {
                     </Button>
 
                     <div className={styles.forgotPassword}>
-                        <Link href="/auth/login">
-                            <p>Đã có tài khoản? Đăng nhập</p>
-                        </Link>
+                        <p>Đã có tài khoản? 
+                            <Link href="/auth/login">
+                                Đăng nhập
+                            </Link>
+                        </p>
                     </div>
                 </Form>
             </div>
