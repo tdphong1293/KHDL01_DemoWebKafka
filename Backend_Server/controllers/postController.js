@@ -55,14 +55,11 @@ postController.likePost = async (req, res) => {
 };
 
 postController.getPostComment = async (req, res) => {
-    const { page = 1, limit = 10 } = req.query;
     const { postID } = req.params;
 
     try {
         const comments = await Comment.find({ post: postID })
             .sort({ createdAt: -1 })
-            .skip((page - 1) * limit)
-            .limit(limit);
 
         res.status(200).json(comments);
     } catch (error) {

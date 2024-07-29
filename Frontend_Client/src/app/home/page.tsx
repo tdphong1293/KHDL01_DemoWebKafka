@@ -4,9 +4,9 @@ import { FaThumbsUp, FaComment } from 'react-icons/fa';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import styles from '../../styles/page.module.css';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import axios from 'axios';
-import Comments from '@/components/comments';
+import Comments from '@/components/comment';
 
 interface User {
     _id: string;
@@ -88,6 +88,7 @@ const Home = () => {
                 await axios.post(`http://localhost:8080/api/posts/${postID}/comments/create`, { token, commenterID: user.userID, commenterName: user.username, text: commentInput });
                 setCommentInput('');
                 mutatePosts();
+                mutate(`http://localhost:8080/api/posts/${postID}/comments`);
             } catch (error) {
                 console.error('Error creating comment:', error);
             }
