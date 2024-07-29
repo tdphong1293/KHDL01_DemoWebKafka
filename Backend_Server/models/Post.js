@@ -1,11 +1,10 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const PostSchema = new mongoose.Schema({
-    author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    Title: {
+    authorID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    authorName: {
         type: String,
         required: true,
-        maxLength: [200, "Maximum length for post title is 200 characters"]
     },
     content: {
         type: String,
@@ -13,6 +12,7 @@ const PostSchema = new mongoose.Schema({
         maxLength: [3000, "Maximum length for post content is 3000 characters"]
     },
     likeCount: { type: Number, default: 0 },
+    commentCount: { type: Number, default: 0 },
     edited: { type: Boolean, default: false }
 }, { timestamps: true });
 
