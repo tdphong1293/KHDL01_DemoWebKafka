@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const PostSchema = new mongoose.Schema({
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    Title: {
+    title: {
         type: String,
         required: true,
         maxLength: [200, "Maximum length for post title is 200 characters"]

@@ -55,9 +55,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "",
         maxLength: [250, "Must be at most 250 characters long"],
-    },
-    followedcount: { type: Number, default: 0 },
-    followerscount: { type: Number, default: 0 }
+    }
 });
 
 module.exports = mongoose.model('User', UserSchema);
