@@ -1,54 +1,107 @@
-// src/app/home/page.tsx
 'use client';
 import { useState } from "react";
-import { FaThumbsUp, FaComment } from 'react-icons/fa'; // Import FontAwesome icons
-import { format, parseISO } from 'date-fns';
+import { FaThumbsUp, FaComment } from 'react-icons/fa';
+import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import styles from '../../styles/page.module.css';
-import useSWR from 'swr';
+import useSWR, { mutate } from 'swr';
 import axios from 'axios';
+import Comments from '@/components/comment';
+
+interface User {
+    _id: string;
+    username: string;
+}
+
+interface Comment {
+    _id: string;
+    commenterID: string;
+    commenterName: string;
+    post: Post;
+    text: string;
+    edited: boolean;
+    parentComment?: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+interface Post {
+    _id: string;
+    authorID: string;
+    authorName: string;
+    content: string;
+    likeCount: number;
+    commentCount: number;
+    edited: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
+
+const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
 const Home = () => {
     const [postContent, setPostContent] = useState('');
-    const [posts, setPosts] = useState<{ content: string, likes: number, comments: { text: string, date: Date }[], date: Date }[]>([]);
     const [commentInput, setCommentInput] = useState<string>('');
-    const [currentPostIndex, setCurrentPostIndex] = useState<number | null>(null);
+    const [currentPostId, setCurrentPostId] = useState<string | null>(null);
 
-    const userString = localStorage.getItem('user');
+    const userString = localStorage.getItem("user");
     const user = userString && userString !== "undefined" ? JSON.parse(userString) : null;
+
+    const token = localStorage.getItem("token");
+
+    const { data: posts, error: postsError, mutate: mutatePosts } = useSWR<Post[]>('http://localhost:8080/api/posts', fetcher);
 
     const handlePostChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setPostContent(event.target.value);
     };
 
-    const handlePostSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const handlePostSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (postContent.trim()) {
-            setPosts([...posts, { content: postContent, likes: 0, comments: [], date: new Date() }]);
-            setPostContent('');
+            try {
+                await axios.post('http://localhost:8080/api/posts/create', { token, authorID: user.userID, authorName: user.username, content: postContent });
+                setPostContent('');
+                mutatePosts();
+            } catch (error) {
+                console.error('Error creating post:', error);
+            }
         }
     };
 
-    const handleLike = (index: number) => {
-        const updatedPosts = [...posts];
-        updatedPosts[index].likes += 1;
-        setPosts(updatedPosts);
+    const handleLike = async (postID: string) => {
+        try {
+            await axios.post(`http://localhost:8080/api/posts/${postID}/like`, { token, user: user.userID });
+            mutatePosts();
+        } catch (error) {
+            console.error('Error liking post:', error);
+        }
     };
 
     const handleCommentInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setCommentInput(event.target.value);
     };
 
-    const handleCommentSubmit = (index: number) => {
+    const handleCommentSubmit = async (postID: string) => {
         if (commentInput.trim()) {
-            const updatedPosts = [...posts];
-            updatedPosts[index].comments.push({ text: commentInput, date: new Date() });
-            setPosts(updatedPosts);
-            setCommentInput('');
+            try {
+                await axios.post(`http://localhost:8080/api/posts/${postID}/comments/create`, { token, commenterID: user.userID, commenterName: user.username, text: commentInput });
+                setCommentInput('');
+                mutatePosts();
+                mutate(`http://localhost:8080/api/posts/${postID}/comments`);
+            } catch (error) {
+                console.error('Error creating comment:', error);
+            }
         }
     };
 
-    const formatDate = (date: Date) => format(date, "dd MMM yyyy | HH:mm", { locale: vi });
+    const formatDate = (dateString: string) => format(new Date(dateString), "dd MMM yyyy | HH:mm", { locale: vi });
+
+    if (postsError) {
+        console.log(postsError);
+        return <div>Failed to load posts</div>;
+    }
+    if (!posts) return <div>Loading...</div>;
 
     return (
         <div className={styles.container}>
@@ -67,26 +120,26 @@ const Home = () => {
                 </form>
             </div>
             <div className={styles.postsContainer}>
-                {posts.map((post, index) => (
-                    <div key={index} className={styles.post}>
+                {posts.map((post) => (
+                    <div key={post._id} className={styles.post}>
                         <div className={styles.postHeader}>
                             <div className={styles.postAuthor}>
-                                <span className={styles.postAuthorName}>{user.username}</span>
-                                <span className={styles.postTime}>{formatDate(post.date)}</span>
+                                <span className={styles.postAuthorName}>{post.authorName}</span>
+                                <span className={styles.postTime}>{formatDate(post.createdAt)}</span>
                             </div>
                         </div>
                         <div className={styles.postContent}>
                             {post.content}
                         </div>
                         <div className={styles.postActions}>
-                            <button className={styles.actionButton} onClick={() => handleLike(index)}>
-                                <FaThumbsUp className={styles.icon} /> {post.likes}
+                            <button className={styles.actionButton} onClick={() => handleLike(post._id)}>
+                                <FaThumbsUp className={styles.icon} /> {post.likeCount}
                             </button>
-                            <button className={styles.actionButton} onClick={() => setCurrentPostIndex(index)}>
-                                <FaComment className={styles.icon} /> {post.comments.length}
+                            <button className={styles.actionButton} onClick={() => setCurrentPostId(post._id)}>
+                                <FaComment className={styles.icon} /> {post.commentCount}
                             </button>
                         </div>
-                        {currentPostIndex === index && (
+                        {currentPostId === post._id && (
                             <div className={styles.commentSection}>
                                 <input
                                     type="text"
@@ -97,19 +150,11 @@ const Home = () => {
                                 />
                                 <button
                                     className={styles.commentButton}
-                                    onClick={() => handleCommentSubmit(index)}
+                                    onClick={() => handleCommentSubmit(post._id)}
                                 >
                                     Submit
                                 </button>
-                                <div className={styles.commentsList}>
-                                    {post.comments.map((comment, idx) => (
-                                        <div key={idx} className={styles.comment}>
-                                            <span className={styles.postAuthorName}>{user.username}</span>
-                                            <span className={styles.commentText}>{comment.text}</span>
-                                            <span className={styles.commentDate}>{formatDate(comment.date)}</span>
-                                        </div>
-                                    ))}
-                                </div>
+                                <Comments postID={post._id} />
                             </div>
                         )}
                     </div>

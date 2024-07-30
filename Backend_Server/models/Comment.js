@@ -6,9 +6,10 @@ const CommentSchema = new mongoose.Schema({
         required: true,
         maxLength: [2000, "Maximum length for comment is 2000 characters"]
     },
-    user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    post: { type: Schema.Types.ObjectId, ref: 'Post', required: true },
-    parentComment: { type: Schema.Types.ObjectId, ref: 'Comment' },
+    commenterID: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    commenterName: {type: String, required: true},
+    post: { type: mongoose.Schema.Types.ObjectId, ref: 'Post', required: true },
+    parentComment: { type: mongoose.Schema.Types.ObjectId, ref: 'Comment' },
     edited: { type: Boolean, default: false },
 }, { timestamps: true });
 
