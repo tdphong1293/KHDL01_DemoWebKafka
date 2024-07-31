@@ -7,6 +7,10 @@ import styles from '../../styles/page.module.css';
 import useSWR, { mutate } from 'swr';
 import axios from 'axios';
 import Comments from '@/components/comment';
+import { FaRegCommentDots } from "react-icons/fa";
+import { FcLike } from "react-icons/fc";
+import { toast, ToastContainer } from 'react-toastify';
+
 
 interface User {
     _id: string;
@@ -58,6 +62,10 @@ const Home = () => {
 
     const handlePostSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        if (!user) {
+            toast.error('Hãy đăng nhập để thực hiện chức năng này');
+            return;
+        }
         if (postContent.trim()) {
             try {
                 await axios.post('http://localhost:8080/api/posts/create', { token, authorID: user.userID, authorName: user.username, content: postContent });
@@ -70,6 +78,10 @@ const Home = () => {
     };
 
     const handleLike = async (postID: string) => {
+        if (!user) {
+            toast.error('Hãy đăng nhập để thực hiện chức năng này');
+            return;
+        }
         try {
             await axios.post(`http://localhost:8080/api/posts/${postID}/like`, { token, user: user.userID });
             mutatePosts();
@@ -83,6 +95,10 @@ const Home = () => {
     };
 
     const handleCommentSubmit = async (postID: string) => {
+        if (!user) {
+            toast.error('Hãy đăng nhập để thực hiện chức năng này');
+            return;
+        }
         if (commentInput.trim()) {
             try {
                 await axios.post(`http://localhost:8080/api/posts/${postID}/comments/create`, { token, commenterID: user.userID, commenterName: user.username, text: commentInput });
@@ -105,6 +121,7 @@ const Home = () => {
 
     return (
         <div className={styles.container}>
+            <ToastContainer />
             <h1 className={styles.title}>{user ? `Chào ${user.username} đến với TripleDuck` : "Chào bạn đến với TrippleDuck"}</h1>
             <p className={styles.subtitle}>Bạn đang nghĩ gì thế? Có thể chia sẻ với mọi người được không 🥰😘</p>
             <div className={styles.postBox}>
@@ -131,12 +148,12 @@ const Home = () => {
                         <div className={styles.postContent}>
                             {post.content}
                         </div>
-                        <div className={styles.postActions}>
-                            <button className={styles.actionButton} onClick={() => handleLike(post._id)}>
-                                <FaThumbsUp className={styles.icon} /> {post.likeCount}
+                        <div className="d-flex align-items-center">
+                            <button className="btn d-flex align-items-center me-3 p-0" onClick={() => handleLike(post._id)}>
+                                <FcLike size={21} className="me-2" /> <span className="align-middle">{post.likeCount}</span>
                             </button>
-                            <button className={styles.actionButton} onClick={() => setCurrentPostId(post._id)}>
-                                <FaComment className={styles.icon} /> {post.commentCount}
+                            <button className="btn d-flex align-items-center p-0" onClick={() => setCurrentPostId(post._id)}>
+                                <FaRegCommentDots size={21} className="me-2" /> <span className="align-middle">{post.commentCount}</span>
                             </button>
                         </div>
                         {currentPostId === post._id && (
