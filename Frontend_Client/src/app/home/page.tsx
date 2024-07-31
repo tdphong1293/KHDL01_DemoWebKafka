@@ -122,7 +122,7 @@ const Home = () => {
     return (
         <div className={styles.container}>
             <ToastContainer />
-            <h1 className={styles.title}>{user ? `Chào ${user.username} đến với TripleDuck` : "Chào bạn đến với TrippleDuck"}</h1>
+            <h1 className={styles.title}>{user ? `Chào ${user.username} đến với TripleDuck` : "Chào bạn đến với TripleDuck"}</h1>
             <p className={styles.subtitle}>Bạn đang nghĩ gì thế? Có thể chia sẻ với mọi người được không 🥰😘</p>
             <div className={styles.postBox}>
                 <form onSubmit={handlePostSubmit}>
