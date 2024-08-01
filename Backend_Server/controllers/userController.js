@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const bcrypt = require('bcrypt');
 const jwt = require("jsonwebtoken");
+const { sendEvent } = require('../kafka/kafkaConfig');
 
 const userController = {};
 
@@ -18,11 +19,19 @@ userController.signup = async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        await User.create({
+        const newUser = await User.create({
             username,
             email,
             password: hashedPassword,
         });
+
+        await sendEvent('user-activity', {
+            type: 'user_signup',
+            userId: newUser.id,
+            userName: newUser.username,
+            timestamp: new Date().toISOString()
+        })
+
 
         return res.sendStatus(201);
     } catch (error) {
@@ -47,6 +56,13 @@ userController.login = async (req, res) => {
         };
 
         const token = jwt.sign(payload, process.env.SECRET_KEY);
+
+        await sendEvent('user-activity', {
+            type: 'user_login',
+            userId: user._id,
+            userName: user.username,
+            timestamp: new Date().toISOString()
+        })
 
         return res.status(200).json({ message: "Đăng nhập thành công", token, user: payload });
 

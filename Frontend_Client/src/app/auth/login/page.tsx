@@ -29,13 +29,14 @@ const Login: FC = () => {
                 localStorage.setItem('token', token);
                 localStorage.setItem('user', JSON.stringify(user));
                 toast.success("Đăng nhập thành công");
-                router.push('/home');
+                router.push("/home");
             }
+
         } catch (error) {
             if (axios.isAxiosError(error)) {
                 switch (error.response?.status) {
                     case 401:
-                        toast.error("Tài khoản không tồn tại. Vui lòng đăng ký tài khoản");
+                        toast.error("Sai Email hoặc mật khẩu.");
                         break;
                     case 500:
                     default:

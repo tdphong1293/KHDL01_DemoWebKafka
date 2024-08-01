@@ -11,7 +11,11 @@ import '../styles/page.module.css';
 function Header() {
     const router = useRouter();
 
-    const token = localStorage.getItem("token");
+    var token: string | null = "";
+
+    if (typeof window !== "undefined") {
+        token = localStorage.getItem("token");
+    }
 
     const handleLogout = () => {
         localStorage.removeItem("token");

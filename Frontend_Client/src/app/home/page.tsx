@@ -49,10 +49,16 @@ const Home = () => {
     const [commentInput, setCommentInput] = useState<string>('');
     const [currentPostId, setCurrentPostId] = useState<string | null>(null);
 
-    const userString = localStorage.getItem("user");
-    const user = userString && userString !== "undefined" ? JSON.parse(userString) : null;
+    
+    var userString: string | null = "";
+    var token: string | null = "";
+    
+    if (typeof window !== "undefined") {
+        token = localStorage.getItem("token");
+        userString = localStorage.getItem("user");
+    }
 
-    const token = localStorage.getItem("token");
+    const user = userString && userString !== "undefined" ? JSON.parse(userString) : null;
 
     const { data: posts, error: postsError, mutate: mutatePosts } = useSWR<Post[]>('http://localhost:8080/api/posts', fetcher);
 
@@ -83,7 +89,7 @@ const Home = () => {
             return;
         }
         try {
-            await axios.post(`http://localhost:8080/api/posts/${postID}/like`, { token, user: user.userID });
+            await axios.post(`http://localhost:8080/api/posts/${postID}/like`, { token, userID: user.userID });
             mutatePosts();
         } catch (error) {
             console.error('Error liking post:', error);
@@ -122,7 +128,7 @@ const Home = () => {
     return (
         <div className={styles.container}>
             <ToastContainer />
-            <h1 className={styles.title}>{user ? `Chào ${user.username} đến với TripleDuck` : "Chào bạn đến với TrippleDuck"}</h1>
+            <h1 className={styles.title}>{user ? `Chào ${user.username} đến với TripleDuck` : "Chào bạn đến với TripleDuck"}</h1>
             <p className={styles.subtitle}>Bạn đang nghĩ gì thế? Có thể chia sẻ với mọi người được không 🥰😘</p>
             <div className={styles.postBox}>
                 <form onSubmit={handlePostSubmit}>
