@@ -7,19 +7,23 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import dotenv from 'dotenv';
+dotenv.config({ path: "../../../.env" });
+
+const host = process.env.SERVER_HOST || "localhost";
 
 const Login: FC = () => {
     const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // Xử lý logic đăng nhập ở đây
+        
         const formData = new FormData(event.currentTarget);
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
 
         try {
-            const response = await axios.post("http://192.168.10.92:8080/api/users/login", {
+            const response = await axios.post(`http://${host}:8080/api/users/login`, {
                 email,
                 password
             })

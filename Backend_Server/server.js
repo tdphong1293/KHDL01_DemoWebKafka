@@ -4,7 +4,7 @@ const userRoutes = require('./routes/userRoute');
 const postRoutes = require('./routes/postRoute');
 const logRoutes = require('./routes/logRoute');
 require("dotenv").config();
-const port = process.env.PORT;
+const port = process.env.PORT || 8080;
 const mongoose = require("mongoose");
 const cors = require('cors');
 const { connectProducer } = require('./kafka/kafkaConfig');

@@ -8,11 +8,8 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import io from 'socket.io-client';
-
-interface User {
-    _id: string;
-    username: string;
-}
+import dotenv from 'dotenv';
+dotenv.config({ path: "../../.env" });
 
 interface CommentVar {
     _id: string;
@@ -38,6 +35,8 @@ interface Post {
     updatedAt: string;
 }
 
+const host = process.env.SERVER_HOST || "localhost";
+
 const formatDate = (dateString: string) => format(new Date(dateString), "dd MMM yyyy | HH:mm", { locale: vi });
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
@@ -45,10 +44,10 @@ const fetcher = (url: string) => axios.get(url).then(res => res.data);
 const Comment: FC<{ postID: string }> = ({ postID }) => {
     const initialComment = {} as CommentVar;
     const [socketUpdate, setSocketUpdate] = useState<CommentVar>(initialComment);
-    const { data: comments, error, mutate: mutatePostComment } = useSWR<CommentVar[]>(`http://192.168.10.92:8080/api/posts/${postID}/comments`, fetcher);
-
+    const { data: comments, error, mutate: mutatePostComment } = useSWR<CommentVar[]>(`http://${host}:8080/api/posts/${postID}/comments`, fetcher);
+    
     useEffect(() => {
-        const socket = io('http://192.168.10.92:8080');
+        const socket = io(`http://${host}:8080`);
 
         const handlePostUpdate = (updatedPost: CommentVar) => {
             setSocketUpdate(updatedPost);

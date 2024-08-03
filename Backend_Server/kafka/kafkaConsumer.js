@@ -1,7 +1,10 @@
 const { Kafka } = require('kafkajs')
 const Log = require('../models/Log');
 const mongoose = require("mongoose");
+const io = require('socket.io-client');
 require('dotenv').config({ path: '../.env' });
+
+const port = process.env.HOST || 8080;
 
 const kafka = new Kafka({
     clientId: 'tripleduck-consumer',
@@ -16,6 +19,8 @@ const runConsumer = async () => {
         mongoose.connect(`${process.env.MONGODB_URI}`);
         console.log('Connected to MongoDB from Consumer');
     }
+
+    const socket = io(`http://localhost:${port}`);
 
     await consumer.connect()
     await consumer.subscribe({ topic: 'user-activity', fromBeginning: true })
@@ -34,7 +39,7 @@ const runConsumer = async () => {
                 details: event
             });
 
-            // io.to('admin').emit('newLog', event);
+            socket.emit('newLog', event);
         },
     })
 }

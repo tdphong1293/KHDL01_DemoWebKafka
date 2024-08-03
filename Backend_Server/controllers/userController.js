@@ -31,6 +31,7 @@ userController.signup = async (req, res) => {
             timestamp: new Date().toISOString()
         })
 
+        req.app.get('io').emit('userUpdated', { _id: newUser._id });
 
         return res.sendStatus(201);
     } catch (error) {

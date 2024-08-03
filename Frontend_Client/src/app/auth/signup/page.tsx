@@ -7,6 +7,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import dotenv from 'dotenv';
+dotenv.config({ path: "../../../.env" });
+
+const host = process.env.SERVER_HOST || "localhost";
 
 const Register: FC = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -14,7 +18,7 @@ const Register: FC = () => {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        // Xử lý logic đăng ký ở đây
+        
         setIsLoading(true);
 
         const formData = new FormData(event.currentTarget);
@@ -30,7 +34,7 @@ const Register: FC = () => {
         }
 
         try {
-            const response = await axios.post('http://192.168.10.92:8080/api/users/signup', {
+            const response = await axios.post(`http://${host}:8080/api/users/signup`, {
                 username,
                 email,
                 password
