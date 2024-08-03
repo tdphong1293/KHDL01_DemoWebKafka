@@ -55,6 +55,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: "",
         maxLength: [250, "Must be at most 250 characters long"],
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
     }
 });
 

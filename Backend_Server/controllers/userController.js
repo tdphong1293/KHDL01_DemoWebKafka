@@ -51,7 +51,8 @@ userController.login = async (req, res) => {
 
         const payload = {
             userID: user._id,
-            username: user.username
+            username: user.username,
+            isAdmin: user.isAdmin
         };
 
         const token = jwt.sign(payload, process.env.SECRET_KEY);

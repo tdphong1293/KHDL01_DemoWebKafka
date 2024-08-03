@@ -14,6 +14,7 @@ import io from 'socket.io-client';
 interface User {
     _id: string;
     username: string;
+    isAdmin: boolean;
 }
 
 interface Comment {

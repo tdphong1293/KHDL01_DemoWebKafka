@@ -7,6 +7,8 @@ import axios from 'axios';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
 
+const fetcher = (url: string) => axios.get(url).then(res => res.data);
+
 const Admin: React.FC = () => {
     const router = useRouter();
     const [users, setUsers] = useState<any[]>([]);
@@ -14,12 +16,24 @@ const Admin: React.FC = () => {
     const [logs, setLogs] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState<string>('users');
 
+    var userString: string | null = "";
+    var token: string | null = "";
+
+    if (typeof window !== "undefined") {
+        token = localStorage.getItem("token");
+        userString = localStorage.getItem("user");
+    }
+
+    const user = userString && userString !== "undefined" ? JSON.parse(userString) : null;
+    if (!token || !user || !user.isAdmin) {
+        router.push("/home");
+    }
+
     useEffect(() => {
-        // Fetch data when component mounts
         const fetchData = async () => {
             try {
                 const [usersRes, postsRes, logsRes] = await Promise.all([
-                    axios.get('http://localhost:8080/api/users/getAllUser'),
+                    axios.get('http://localhost:8080/api/users/'),
                     axios.get('http://localhost:8080/api/posts/'),
                     axios.get('http://localhost:8080/api/logs/')
                 ]);
@@ -44,7 +58,7 @@ const Admin: React.FC = () => {
                             <Button variant="success" onClick={() => setActiveTab('users')}>Users</Button>
                             <Button variant="primary" onClick={() => setActiveTab('posts')}>Posts</Button>
                             <Button variant="info" onClick={() => setActiveTab('logs')}>Logs</Button>
-                            <Button variant="warning"><Link href={"/home"} className="nav-link" >Log out</Link></Button>
+                            <Button variant="warning"><Link href={"/home"} className="nav-link" >Home Page</Link></Button>
                         </div>
                     </div>
                 </Col>
@@ -52,7 +66,7 @@ const Admin: React.FC = () => {
                     <div className="bg-light p-4 rounded-3 shadow-sm" style={{ height: '90vh', overflowY: 'auto' }}>
                         <h3>Dashboard</h3>
                         <p className="text-muted">
-                            Welcome to the admin panel. Manage users, review content, and check site analytics here.
+                            Trang Admin, dùng để theo dõi User, Post và Log
                         </p>
                         <div className="mt-4 p-3 bg-white border rounded-3 shadow-sm" style={{ height: '70vh', overflowY: 'auto' }}>
                             {activeTab === 'users' && (
