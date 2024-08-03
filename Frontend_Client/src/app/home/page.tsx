@@ -1,6 +1,5 @@
 'use client';
-import { useState } from "react";
-import { FaThumbsUp, FaComment } from 'react-icons/fa';
+import { useState, useEffect } from "react";
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import styles from '../../styles/page.module.css';
@@ -10,7 +9,7 @@ import Comments from '@/components/comment';
 import { FaRegCommentDots } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { toast, ToastContainer } from 'react-toastify';
-
+import io from 'socket.io-client';
 
 interface User {
     _id: string;
@@ -48,11 +47,13 @@ const Home = () => {
     const [postContent, setPostContent] = useState('');
     const [commentInput, setCommentInput] = useState<string>('');
     const [currentPostId, setCurrentPostId] = useState<string | null>(null);
+    const initialPost = {} as Post;
+    const [socketUpdate, setSocketUpdate] = useState<Post>(initialPost);
 
-    
+
     var userString: string | null = "";
     var token: string | null = "";
-    
+
     if (typeof window !== "undefined") {
         token = localStorage.getItem("token");
         userString = localStorage.getItem("user");
@@ -60,7 +61,29 @@ const Home = () => {
 
     const user = userString && userString !== "undefined" ? JSON.parse(userString) : null;
 
-    const { data: posts, error: postsError, mutate: mutatePosts } = useSWR<Post[]>('http://localhost:8080/api/posts', fetcher);
+    const { data: posts, error: postsError, mutate: mutatePosts } = useSWR<Post[]>('http://192.168.10.92:8080/api/posts', fetcher);
+
+
+    useEffect(() => {
+        const socket = io('http://192.168.10.92:8080');
+
+        const handlePostUpdate = (updatedPost: Post) => {
+            setSocketUpdate(updatedPost);
+        };
+
+        socket.on('postUpdated', handlePostUpdate);
+
+        return () => {
+            socket.off('postUpdated');
+            socket.disconnect();
+        };
+    }, []);
+
+    useEffect(() => {
+        if (socketUpdate) {
+            mutatePosts();
+        }
+    }, [socketUpdate])
 
     const handlePostChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
         setPostContent(event.target.value);
@@ -74,7 +97,7 @@ const Home = () => {
         }
         if (postContent.trim()) {
             try {
-                await axios.post('http://localhost:8080/api/posts/create', { token, authorID: user.userID, authorName: user.username, content: postContent });
+                await axios.post('http://192.168.10.92:8080/api/posts/create', { token, authorID: user.userID, authorName: user.username, content: postContent });
                 setPostContent('');
                 mutatePosts();
             } catch (error) {
@@ -89,7 +112,7 @@ const Home = () => {
             return;
         }
         try {
-            await axios.post(`http://localhost:8080/api/posts/${postID}/like`, { token, userID: user.userID });
+            await axios.post(`http://192.168.10.92:8080/api/posts/${postID}/like`, { token, userID: user.userID });
             mutatePosts();
         } catch (error) {
             console.error('Error liking post:', error);
@@ -107,10 +130,10 @@ const Home = () => {
         }
         if (commentInput.trim()) {
             try {
-                await axios.post(`http://localhost:8080/api/posts/${postID}/comments/create`, { token, commenterID: user.userID, commenterName: user.username, text: commentInput });
+                await axios.post(`http://192.168.10.92:8080/api/posts/${postID}/comments/create`, { token, commenterID: user.userID, commenterName: user.username, text: commentInput });
                 setCommentInput('');
                 mutatePosts();
-                mutate(`http://localhost:8080/api/posts/${postID}/comments`);
+                mutate(`http://192.168.10.92:8080/api/posts/${postID}/comments`);
             } catch (error) {
                 console.error('Error creating comment:', error);
             }

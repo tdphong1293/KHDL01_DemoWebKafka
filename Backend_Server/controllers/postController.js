@@ -21,6 +21,8 @@ postController.createPost = async (req, res) => {
             timestamp: new Date().toISOString()
         })
 
+        req.app.get('io').emit('postUpdated', { _id: newPost._id });
+
         res.sendStatus(201);
     } catch (error) {
         console.log(error);
@@ -49,7 +51,7 @@ postController.likePost = async (req, res) => {
         const likeCheck = await Like.findOne({ user: userID, post: postID });
         if (likeCheck) {
             await Like.deleteOne({ user: userID, post: postID });
-            await Post.updateOne({ _id: postID }, { $inc: { likeCount: -1 } });
+            const post = await Post.findOneAndUpdate({ _id: postID }, { $inc: { likeCount: -1 } }, { new: true });
 
             await sendEvent('user-activity', {
                 type: 'post_unliked',
@@ -57,10 +59,12 @@ postController.likePost = async (req, res) => {
                 postID: postID,
                 timestamp: new Date().toISOString()
             })
+
+            req.app.get('io').emit('postUpdated', { _id: postID, likeCount: post.likeCount });
         }
         else {
             await Like.create({ user: userID, post: postID });
-            await Post.updateOne({ _id: postID }, { $inc: { likeCount: 1 } });
+            const post = await Post.findOneAndUpdate({ _id: postID }, { $inc: { likeCount: 1 } }, { new: true });
 
             await sendEvent('user-activity', {
                 type: 'post_liked',
@@ -68,6 +72,8 @@ postController.likePost = async (req, res) => {
                 postID: postID,
                 timestamp: new Date().toISOString()
             })
+
+            req.app.get('io').emit('postUpdated', { _id: postID, likeCount: post.likeCount });
         }
 
         res.sendStatus(201);
@@ -97,7 +103,7 @@ postController.commentPost = async (req, res) => {
 
     try {
         await Comment.create({ commenterID, commenterName, post: postID, text });
-        await Post.updateOne({ _id: postID }, { $inc: { commentCount: 1 } });
+        const post = await Post.findOneAndUpdate({ _id: postID }, { $inc: { commentCount: 1 } }, { new: true });
 
         await sendEvent('user-activity', {
             type: 'post_commented',
@@ -106,6 +112,8 @@ postController.commentPost = async (req, res) => {
             text: text,
             timestamp: new Date().toISOString()
         })
+
+        req.app.get('io').emit('postUpdated', { _id: postID, commentCount: post.commentCount });
 
         res.sendStatus(201);
     } catch (error) {
