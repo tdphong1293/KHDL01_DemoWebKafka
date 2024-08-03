@@ -1,5 +1,7 @@
 const { Kafka } = require('kafkajs')
 const Log = require('../models/Log');
+const mongoose = require("mongoose");
+require('dotenv').config({ path: '../.env' });
 
 const kafka = new Kafka({
     clientId: 'tripleduck-consumer',
@@ -10,6 +12,11 @@ const kafka = new Kafka({
 const consumer = kafka.consumer({ groupId: 'tripleduck-activity-group' })
 
 const runConsumer = async () => {
+    if (mongoose.connection.readyState !== 1) {
+        mongoose.connect(`${process.env.MONGODB_URI}`);
+        console.log('Connected to MongoDB from Consumer');
+    }
+
     await consumer.connect()
     await consumer.subscribe({ topic: 'user-activity', fromBeginning: true })
 
