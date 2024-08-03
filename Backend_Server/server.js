@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoute');
 const postRoutes = require('./routes/postRoute');
+const logRoutes = require('./routes/logRoute');
 require("dotenv").config();
 const port = process.env.PORT;
 const mongoose = require("mongoose");
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/users', userRoutes);
 app.use('/api/posts', postRoutes);
+app.use('/api/logs', logRoutes);
 app.set('io', io);
 
 app.get('/', (req, res) => {
