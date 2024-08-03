@@ -14,13 +14,9 @@ function Header() {
 
     var token: string | null = "";
 
-    useEffect(() => {
+    if (typeof window !== "undefined") {
         token = localStorage.getItem("token");
-    }, []);
-
-    // if (typeof window !== "undefined") {
-    //     token = localStorage.getItem("token");
-    // }
+    }
 
     const handleLogout = () => {
         localStorage.removeItem("token");
