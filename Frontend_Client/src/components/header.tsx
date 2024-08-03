@@ -6,6 +6,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import '../styles/page.module.css';
 
 function Header() {
@@ -13,9 +14,13 @@ function Header() {
 
     var token: string | null = "";
 
-    if (typeof window !== "undefined") {
+    useEffect(() => {
         token = localStorage.getItem("token");
-    }
+    }, []);
+
+    // if (typeof window !== "undefined") {
+    //     token = localStorage.getItem("token");
+    // }
 
     const handleLogout = () => {
         localStorage.removeItem("token");

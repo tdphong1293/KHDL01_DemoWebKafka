@@ -16,9 +16,8 @@ postController.createPost = async (req, res) => {
 
         await sendEvent('user-activity', {
             type: 'post_created',
-            userId: authorID, // Assuming you have user info in the request
-            userName: authorName,
-            postId: newPost._id,
+            userID: authorID,
+            postID: newPost._id,
             timestamp: new Date().toISOString()
         })
 
@@ -54,8 +53,8 @@ postController.likePost = async (req, res) => {
 
             await sendEvent('user-activity', {
                 type: 'post_unliked',
-                userId: userID,
-                postId: postID,
+                userID: userID,
+                postID: postID,
                 timestamp: new Date().toISOString()
             })
         }
@@ -65,8 +64,8 @@ postController.likePost = async (req, res) => {
 
             await sendEvent('user-activity', {
                 type: 'post_liked',
-                userId: userID,
-                postId: postID,
+                userID: userID,
+                postID: postID,
                 timestamp: new Date().toISOString()
             })
         }
@@ -102,9 +101,8 @@ postController.commentPost = async (req, res) => {
 
         await sendEvent('user-activity', {
             type: 'post_commented',
-            userId: commenterID,
-            userName: commenterName,
-            postId: postID,
+            userID: commenterID,
+            postID: postID,
             text: text,
             timestamp: new Date().toISOString()
         })

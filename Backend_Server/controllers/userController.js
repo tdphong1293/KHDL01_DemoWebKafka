@@ -27,8 +27,7 @@ userController.signup = async (req, res) => {
 
         await sendEvent('user-activity', {
             type: 'user_signup',
-            userId: newUser.id,
-            userName: newUser.username,
+            userID: newUser._id,
             timestamp: new Date().toISOString()
         })
 
@@ -59,8 +58,7 @@ userController.login = async (req, res) => {
 
         await sendEvent('user-activity', {
             type: 'user_login',
-            userId: user._id,
-            userName: user.username,
+            userID: user._id,
             timestamp: new Date().toISOString()
         })
 

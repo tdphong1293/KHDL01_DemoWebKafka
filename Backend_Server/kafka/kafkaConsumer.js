@@ -1,10 +1,9 @@
-// Create a new file: kafkaConsumer.js
-
 const { Kafka } = require('kafkajs')
+const Log = require('../models/Log');
 
 const kafka = new Kafka({
     clientId: 'tripleduck-consumer',
-    brokers: ['kafka:9092'], // Update this to your Kafka broker address
+    brokers: ['kafka:9092'], 
     connectionTimeout: 3000
 })
 
@@ -19,26 +18,16 @@ const runConsumer = async () => {
             const event = JSON.parse(message.value.toString())
             console.log('Received event:', event)
 
-            // Here you can process the event, e.g., store it in a database
-            // or trigger other actions based on the event type
-            switch (event.type) {
-                case 'user_signup':
-                    // Handle user signup event
-                    break
-                case 'user_login':
-                    // Handle user login event
-                    break
-                case 'post_created':
-                    // Handle post creation event
-                    break
-                case 'post_liked':
-                    // Handle post like event
-                    break
-                case 'post_commented':
-                    
-                    break
-                // Add more cases as needed
-            }
+            await Log.create({
+                type: event.type,
+                userID: event.userID,
+                postID: event.postID,
+                timestamp: new Date(event.timestamp),
+                text: event.text,
+                details: event
+            });
+
+            // io.to('admin').emit('newLog', event);
         },
     })
 }
