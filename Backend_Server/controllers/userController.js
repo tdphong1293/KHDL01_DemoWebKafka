@@ -64,6 +64,8 @@ userController.login = async (req, res) => {
             timestamp: new Date().toISOString()
         })
 
+        req.app.get('io').emit('userUpdated', { _id: user._id });
+
         if (user.isAdmin){
             return res.status(201).json({ message: "Đăng nhập thành công", token, user: payload });
         }
