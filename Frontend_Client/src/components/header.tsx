@@ -12,9 +12,11 @@ function Header() {
     const router = useRouter();
 
     var token: string | null = "";
+    var userString: string | null = "";
 
     if (typeof window !== "undefined") {
         token = localStorage.getItem("token");
+        userString = localStorage.getItem("user")
     }
 
     const handleLogout = () => {
@@ -23,7 +25,9 @@ function Header() {
         router.refresh();
     }
 
-    if (token) {
+    const user = userString && userString !== "undefined" ? JSON.parse(userString) : null;
+
+    if (token && user.isAdmin) {
         return (
             <Navbar expand="lg" className="fixed-top shadow-sm" style={{ backgroundColor: '#fcfde9' }}>
                 <Container>
@@ -43,6 +47,32 @@ function Header() {
                                     <Link href={"/admin"} className="nav-link" style={{ color: '#fbd800' }}>Dashboard</Link>
                                 </Button>
                             </Nav.Item>
+                            <Nav.Item>
+                                <Button onClick={handleLogout} style={{ backgroundColor: '#fbd800', borderColor: '#fbd800', fontWeight: 'bold' }}>
+                                    <div className="nav-link" style={{ color: '#352104' }}>Đăng xuất</div>
+                                </Button>
+                            </Nav.Item>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
+        );
+    }
+    else if (token) {
+        return (
+            <Navbar expand="lg" className="fixed-top shadow-sm" style={{ backgroundColor: '#fcfde9' }}>
+                <Container>
+                    <Navbar.Brand>
+                        <Link href={"/home"} className="navbar-brand">
+                            <img src="/assets/logo.png" alt="logo" width="160px" height="53px" />
+                        </Link>
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="me-auto">
+                            {/* Các liên kết khác nếu có */}
+                        </Nav>
+                        <Nav className="ms-auto"> {/* Đặt các liên kết ở góc phải */}
                             <Nav.Item>
                                 <Button onClick={handleLogout} style={{ backgroundColor: '#fbd800', borderColor: '#fbd800', fontWeight: 'bold' }}>
                                     <div className="nav-link" style={{ color: '#352104' }}>Đăng xuất</div>
