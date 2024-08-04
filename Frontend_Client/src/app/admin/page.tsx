@@ -8,8 +8,6 @@ import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import useSWR from 'swr';
 import io from 'socket.io-client';
-import dotenv from 'dotenv';
-dotenv.config({ path: "../../../.env" });
 
 interface User {
     _id: string;
@@ -39,7 +37,8 @@ interface Log {
     details: any;
 }
 
-const host = process.env.SERVER_HOST || "localhost";
+const host = process.env.NEXT_PUBLIC_SERVER_HOST || "localhost";
+
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 
 const Admin: React.FC = () => {

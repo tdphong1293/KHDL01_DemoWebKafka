@@ -10,8 +10,6 @@ import { FaRegCommentDots } from "react-icons/fa";
 import { FcLike } from "react-icons/fc";
 import { toast, ToastContainer } from 'react-toastify';
 import io from 'socket.io-client';
-import dotenv from 'dotenv';
-dotenv.config({ path: "../../../.env" });
 
 interface User {
     _id: string;
@@ -31,7 +29,7 @@ interface Post {
     updatedAt: string;
 }
 
-const host = process.env.SERVER_HOST || "localhost";
+const host = process.env.NEXT_PUBLIC_SERVER_HOST || "localhost";
 
 const fetcher = (url: string) => axios.get(url).then(res => res.data);
 

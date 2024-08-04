@@ -7,10 +7,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import dotenv from 'dotenv';
-dotenv.config({ path: "../../../.env" });
 
-const host = process.env.SERVER_HOST || "localhost";
+const host = process.env.NEXT_PUBLIC_SERVER_HOST || "localhost";
 
 const Register: FC = () => {
     const [isLoading, setIsLoading] = useState(false);

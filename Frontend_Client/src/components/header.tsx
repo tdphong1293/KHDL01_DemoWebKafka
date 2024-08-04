@@ -6,7 +6,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Link from "next/link";
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 import '../styles/page.module.css';
 
 function Header() {
@@ -40,7 +39,12 @@ function Header() {
                         </Nav>
                         <Nav className="ms-auto"> {/* Đặt các liên kết ở góc phải */}
                             <Nav.Item>
-                                <Button onClick={handleLogout} style={{ backgroundColor: '#fbd800', borderColor: '#fbd800', fontWeight: 'bold', marginRight: '10px' }}>
+                                <Button style={{ backgroundColor: '#352104', borderColor: '#352104', fontWeight: 'bold', width: '125.85px', marginRight: '10px' }}>
+                                    <Link href={"/admin"} className="nav-link" style={{ color: '#fbd800' }}>Dashboard</Link>
+                                </Button>
+                            </Nav.Item>
+                            <Nav.Item>
+                                <Button onClick={handleLogout} style={{ backgroundColor: '#fbd800', borderColor: '#fbd800', fontWeight: 'bold' }}>
                                     <div className="nav-link" style={{ color: '#352104' }}>Đăng xuất</div>
                                 </Button>
                             </Nav.Item>
@@ -74,7 +78,6 @@ function Header() {
                             <Button style={{ backgroundColor: '#352104', borderColor: '#352104', fontWeight: 'bold', width: '125.85px' }}>
                                 <Link href={"/auth/signup"} className="nav-link" style={{ color: '#fbd800' }}>Đăng ký</Link>
                             </Button>
-
                         </Nav.Item>
                     </Nav>
                 </Navbar.Collapse>

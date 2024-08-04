@@ -7,17 +7,16 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import dotenv from 'dotenv';
-dotenv.config({ path: "../../../.env" });
 
-const host = process.env.SERVER_HOST || "localhost";
+const host = process.env.NEXT_PUBLIC_SERVER_HOST || "localhost";
 
 const Login: FC = () => {
+
     const router = useRouter();
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
+
         const formData = new FormData(event.currentTarget);
         const email = formData.get('email') as string;
         const password = formData.get('password') as string;
@@ -34,6 +33,13 @@ const Login: FC = () => {
                 localStorage.setItem('user', JSON.stringify(user));
                 toast.success("Đăng nhập thành công");
                 router.push("/home");
+            }
+            else if (response.status === 201) {
+                const { token, user } = response.data
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+                toast.success("Đăng nhập thành công");
+                router.push("/admin");
             }
 
         } catch (error) {

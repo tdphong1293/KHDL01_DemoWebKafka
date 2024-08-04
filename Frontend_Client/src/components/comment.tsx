@@ -8,8 +8,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import io from 'socket.io-client';
-import dotenv from 'dotenv';
-dotenv.config({ path: "../../.env" });
+
 
 interface CommentVar {
     _id: string;
@@ -35,7 +34,7 @@ interface Post {
     updatedAt: string;
 }
 
-const host = process.env.SERVER_HOST || "localhost";
+const host = process.env.NEXT_PUBLIC_SERVER_HOST || "localhost";
 
 const formatDate = (dateString: string) => format(new Date(dateString), "dd MMM yyyy | HH:mm", { locale: vi });
 
