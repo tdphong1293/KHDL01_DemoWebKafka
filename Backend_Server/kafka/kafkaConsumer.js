@@ -6,14 +6,17 @@ require('dotenv').config({ path: '../.env' });
 
 const port = process.env.HOST || 8080;
 
+// Connect to Kafka broker
 const kafka = new Kafka({
     clientId: 'tripleduck-consumer',
     brokers: ['kafka:9092'], 
     connectionTimeout: 3000
 })
 
+// Create Consumer
 const consumer = kafka.consumer({ groupId: 'tripleduck-activity-group' })
 
+// Config to run Consumer
 const runConsumer = async () => {
     if (mongoose.connection.readyState !== 1) {
         mongoose.connect(`${process.env.MONGODB_URI}`);
@@ -22,14 +25,18 @@ const runConsumer = async () => {
 
     const socket = io(`http://localhost:${port}`);
 
+    // Connect Consumer to Kafka broker
     await consumer.connect()
+    // Subscribe to topics that Consumer want to consume
     await consumer.subscribe({ topic: 'user-activity', fromBeginning: true })
 
+    // Run Consumer and process each message consumed from Kafka broker topics
     await consumer.run({
         eachMessage: async ({ topic, partition, message }) => {
             const event = JSON.parse(message.value.toString())
             console.log('Received event:', event)
 
+            // Persist log to database
             await Log.create({
                 type: event.type,
                 userID: event.userID,
@@ -44,4 +51,5 @@ const runConsumer = async () => {
     })
 }
 
+// Run Consumer
 runConsumer().catch(console.error)
